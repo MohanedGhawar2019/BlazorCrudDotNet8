@@ -1,0 +1,50 @@
+﻿@page "/addGame"
+@page "/addGame/{id:guid}"
+
+@inject NavigationManager _navigationManager
+@inject IGameService _clientService
+@attribute [RenderModeInteractiveWebAssembly]
+
+<h3>upsertGame</h3>
+
+<EditForm Model="game" OnSubmit="SaveGame">
+
+    <label for="title">Title</label>
+    <InputText @bind-Value="game.Name">@game.Name </InputText>
+
+        <label for="title">Description</label>
+        <InputText @bind-Value="game.Description">@game.Description </InputText>
+
+        <button class="btn btn-primary" type="submit">Save</button>
+
+    </EditForm>
+
+    @code {
+
+    [Parameter]
+    public Guid Id { get; set; }
+
+    Game game { get; set; } = new Game { Name = string.Empty };
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Id != Guid.Empty)
+        {
+            game = await _clientService.GetGameById(Id);
+        }
+    }
+
+    async Task SaveGame()
+    {
+        if (game.Id == Guid.Empty)
+        {
+            await _clientService.AddGame(game);
+        }
+        else
+        {
+            await _clientService.UpdateGame(game);
+        }
+        _navigationManager.NavigateTo("/games");
+    }
+
+}

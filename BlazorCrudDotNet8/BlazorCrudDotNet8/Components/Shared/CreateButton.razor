@@ -1,0 +1,11 @@
+﻿@inject NavigationManager _navigationManager
+@attribute [RenderModeInteractiveServer]
+
+<button @onclick="Create" class="btn btn-primary">Create New</button>
+@code {
+
+    void Create()
+    {
+        _navigationManager.NavigateTo("/addGame");
+    }
+}
