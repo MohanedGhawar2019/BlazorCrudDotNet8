@@ -14,9 +14,6 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 //});
 
 builder.Services.AddScoped<IGRepository<Game>, GRepository<Game>>();
-var serviceProvider = builder.Services.BuildServiceProvider();
-var repo = serviceProvider.GetService<IGRepository<Game>>();
-Console.WriteLine(repo);
 
 builder.Services.AddScoped(http => new HttpClient
 {
