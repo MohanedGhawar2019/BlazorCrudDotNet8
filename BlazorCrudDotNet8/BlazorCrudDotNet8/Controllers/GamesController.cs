@@ -1,9 +1,7 @@
-﻿using BlazorCrudDotNet8.Shared.Data;
-using BlazorCrudDotNet8.Shared.Services.Interfaces;
-using Microsoft.AspNetCore.Http;
+﻿using BlazorCrudDotNet8.Models.Interfaces;
+using BlazorCrudDotNet8.Shared.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace BlazorCrudDotNet8.Controllers
 {
@@ -25,14 +23,14 @@ namespace BlazorCrudDotNet8.Controllers
             return Ok(data);
         }
 
-        [HttpGet]
+        [HttpGet("{id:guid}")]
         public async Task<IActionResult> GetById(Guid id)
         {
             var data = await _game.Entity.GetByIdAsync(id);
             return Ok(data);
         }
 
-        [HttpPost]
+        [HttpPost("Create")]
         public async Task<ActionResult<Game>> Create(Game game)
         {
             if (ModelState.IsValid)
@@ -44,19 +42,19 @@ namespace BlazorCrudDotNet8.Controllers
             return BadRequest();
         }
 
-        [HttpPut]
+        [HttpPut("{id:guid}")]
         public async Task<ActionResult<Game>> Update(Game game)
         {
             if (ModelState.IsValid)
             {
-                _game.Entity.Update1(game);
+                _game.Entity.Update(game);
                 await _game.SaveAsync();
                 return Ok(game);
             }
             return BadRequest();
         }
 
-        [HttpDelete]
+        [HttpDelete("{id:guid}")]
         public async Task<ActionResult<Game>> Delete(Guid id)
         {
             var game = await _game.Entity.GetByIdAsync(id);
@@ -64,9 +62,11 @@ namespace BlazorCrudDotNet8.Controllers
             {
                 return NotFound();
             }
-            _game.Entity.Delete(game);
+
+            _game.Entity.Delete(game.Id);
             await _game.SaveAsync();
-            return Ok(game);
+
+            return Ok(true);
         }
 
 

@@ -1,50 +1,104 @@
-﻿@page "/addGame"
-@page "/addGame/{id:guid}"
+﻿@page "/editGame"
+@page "/editGame/{id:guid}"
 
-@inject NavigationManager _navigationManager
-@inject IGameService _clientService
+
+@inject SweetAlertService Swal;
+@inject IGRepository<Game> _game;
+@inject HttpClient Http
 @attribute [RenderModeInteractiveWebAssembly]
 
-<h3>upsertGame</h3>
+@if (Id == Guid.Empty)
+{
+    <h3>Create Game</h3>
+}
+else
+{
+    <h3>Edit @game.Name</h3>
+}
 
 <EditForm Model="game" OnSubmit="SaveGame">
 
     <label for="title">Title</label>
     <InputText @bind-Value="game.Name">@game.Name </InputText>
 
-        <label for="title">Description</label>
+        <label for="Description">Description</label>
         <InputText @bind-Value="game.Description">@game.Description </InputText>
 
         <button class="btn btn-primary" type="submit">Save</button>
+        @if (Id != Guid.Empty)
+    {
+        <button @onclick="Delete" class="btn btn-primary" type="button">Delete</button>
+    }
 
-    </EditForm>
+</EditForm>
 
-    @code {
+@code {
+    public const string BasePath = "https://localhost:7157/api/";
 
     [Parameter]
     public Guid Id { get; set; }
 
-    Game game { get; set; } = new Game { Name = string.Empty };
+    Game game { get; set; } = new Game { Name = string.Empty }; // initialize to avoid null reference exception cuz its required
 
     protected override async Task OnInitializedAsync()
     {
         if (Id != Guid.Empty)
         {
-            game = await _clientService.GetGameById(Id);
+            var response = await Http.GetAsync($"{BasePath}Games/GetById/{Id}");
+            if (response.IsSuccessStatusCode)
+            {
+                var game = await response.Content.ReadFromJsonAsync<Game>();
+            }
+            // game = await _game.GetByIdAsync("Games/GetById", Id);
         }
     }
 
     async Task SaveGame()
     {
-        if (game.Id == Guid.Empty)
+        ResponseModel res;
+
+        var response = await Http.PostAsJsonAsync($"{BasePath}Games/Create", game);
+        if (response.IsSuccessStatusCode)
         {
-            await _clientService.AddGame(game);
+            _navManager.NavigateTo("/games");
         }
-        else
-        {
-            await _clientService.UpdateGame(game);
-        }
-        _navigationManager.NavigateTo("/games");
+
+        // if (game.Id == Guid.Empty)
+        // res = await _game.Insert("Banks/insertBank", game);
+        // else
+        // res = await _game.Update("Banks/updateBank", game, game.Id);
+        // if (res != null)
+        // {
+        //     if (res.Status == true)
+        //     {
+        //         _toast.ShowSuccess($"{res.Message}");
+        //         _navManager.NavigateTo("/banks");
+        //     }
+        //     else if (res.Message != null)
+        //     {
+        //         _toast.ShowError($"فشلت العملية : {res.Message}");
+        //     }
+        // }
     }
 
+    async Task Delete()
+    {
+        // SweetAlertResult result = await Swal.FireAsync(new SweetAlertOptions
+        //     {
+        //         Title = "Are you sure?",
+        //         Text = "You will not be able to recover this imaginary file!",
+        //         Icon = SweetAlertIcon.Warning,
+        //         ShowCancelButton = true,
+        //         ConfirmButtonText = "Yes, delete it!",
+        //         CancelButtonText = "No"
+        //     });
+
+        //  _clientService.Entity.Delete(Id);
+        // _navigationManager.NavigateTo("/games");
+        // _toast.ShowSuccess("Deleted");
+    }
+
+
 }
+
+

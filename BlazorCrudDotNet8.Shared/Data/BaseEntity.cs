@@ -1,4 +1,6 @@
-﻿namespace BlazorCrudDotNet8.Shared.Data
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace BlazorCrudDotNet8.Shared.Data
 {
     public class BaseEntity
     {

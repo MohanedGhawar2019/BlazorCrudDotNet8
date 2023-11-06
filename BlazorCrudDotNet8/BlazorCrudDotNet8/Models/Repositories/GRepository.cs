@@ -1,9 +1,8 @@
-﻿using BlazorCrudDotNet8.Shared.Data;
-using BlazorCrudDotNet8.Shared.Services.Interfaces;
+﻿using BlazorCrudDotNet8.Models.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace BlazorCrudDotNet8.Shared.Services.Repositories
+namespace BlazorCrudDotNet8.Models.Repositories
 {
     public class GRepository<T> : IGRepository<T> where T : class
     {
@@ -28,22 +27,19 @@ namespace BlazorCrudDotNet8.Shared.Services.Repositories
 
         public IQueryable<T> GetAll()
         {
-            return table.AsQueryable().AsTracking();
+            return table.AsQueryable().AsNoTracking();
         }
 
         public void Insert(T entity)
         {
             table.Add(entity);
         }
-        public void Update(T entity, T oldData)
+        public void Update(T entity)
         {
-            _context.Entry(oldData).CurrentValues.SetValues(entity);
-        }
-
-        public void Update1(T entity)
-        {
+           
             table.Attach(entity);
             _context.Entry(entity).State = EntityState.Modified;
+          
         }
 
         public IQueryable<T> Find(Expression<Func<T, bool>> predicate)

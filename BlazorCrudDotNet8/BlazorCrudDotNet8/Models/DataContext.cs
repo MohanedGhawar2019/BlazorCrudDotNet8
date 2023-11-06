@@ -1,8 +1,9 @@
-﻿using BlazorCrudDotNet8.Shared.Entities;
+﻿using BlazorCrudDotNet8.Models.Entities;
+using BlazorCrudDotNet8.Shared.Data;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace BlazorCrudDotNet8.Shared.Data
+namespace BlazorCrudDotNet8.Models
 {
     public class DataContext : IdentityDbContext<ApplicationUser>
     {
@@ -13,5 +14,7 @@ namespace BlazorCrudDotNet8.Shared.Data
 
         public DbSet<Game> Games { get; set; }
 
+
+      
     }
 }

@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace BlazorCrudDotNet8.Shared.Migrations
+namespace BlazorCrudDotNet8.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class key : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

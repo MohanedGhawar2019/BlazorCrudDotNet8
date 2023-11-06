@@ -1,14 +1,36 @@
 ﻿@page "/games"
 @attribute [StreamRendering(true)]
 @inject IUnitOfWork<Game> _game
-@inject IGameService _gameService
 
 <h3>GameList</h3>
 <CreateButton />
 
 @if (games == null)
 {
-    <span>Loading....</span>
+    <div class="loaderContainer">
+        <div class="loader">
+            <div class="inner_loader"></div>
+            <div class="inner_loader"></div>
+            <div class="inner_loader"></div>
+            <div class="inner_loader"></div>
+            <div class="inner_loader"></div>
+            <div class="inner_loader"></div>
+            <div class="inner_loader"></div>
+            <div class="inner_loader"></div>
+            <div class="inner_loader"></div>
+            <div class="inner_loader"></div>
+            <div class="inner_loader"></div>
+            <div class="inner_loader"></div>
+            <div class="inner_loader"></div>
+            <div class="inner_loader"></div>
+            <div class="inner_loader"></div>
+            <div class="inner_loader"></div>
+            <div class="inner_loader"></div>
+            <div class="inner_loader"></div>
+            <div class="inner_loader"></div>
+            <div class="inner_loader"></div>
+        </div>
+    </div>
 }
 else if (games.Count() == 0)
 {
@@ -19,7 +41,9 @@ else
     <ul>
         @foreach (var game in games)
         {
-            <li>@game.Name</li>
+            <li>@game.Name &nbsp;-&nbsp; @game.Description</li>
+            // create a edit button
+            <EditButton Id="@game.Id" />
         }
     </ul>
 }
@@ -30,7 +54,7 @@ else
     protected override async Task OnInitializedAsync()
     {
         await Task.Delay(500);
-        games = await _gameService.GetAllGames();
+        games = _game.Entity.GetAll();
     }
 
 }

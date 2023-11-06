@@ -8,6 +8,14 @@
 @using BlazorCrudDotNet8
 @using BlazorCrudDotNet8.Client
 @using BlazorCrudDotNet8.Components
-@using BlazorCrudDotNet8.Shared.Services.Interfaces
 @using BlazorCrudDotNet8.Shared.Data
 @using BlazorCrudDotNet8.Components.Shared
+@using BlazorCrudDotNet8.Models.Interfaces
+
+@using Blazored;
+@using Blazored.Toast;
+@using Blazored.Toast.Services;
+@using CurrieTechnologies.Razor.SweetAlert2
+
+@inject IToastService _toast
+@inject IJSRuntime JS;

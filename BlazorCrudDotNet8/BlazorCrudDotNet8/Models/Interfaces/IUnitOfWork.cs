@@ -1,4 +1,4 @@
-﻿namespace BlazorCrudDotNet8.Shared.Services.Interfaces
+﻿namespace BlazorCrudDotNet8.Models.Interfaces
 {
     public interface IUnitOfWork<T> where T : class
     {

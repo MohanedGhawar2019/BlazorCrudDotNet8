@@ -1,8 +1,7 @@
-﻿using BlazorCrudDotNet8.Shared.Data;
-using BlazorCrudDotNet8.Shared.Services.Interfaces;
-using BlazorCrudDotNet8.Shared.Services.Repositories;
+﻿using BlazorCrudDotNet8.Models.Interfaces;
+using BlazorCrudDotNet8.Models.Repositories;
 
-namespace BlazorCrudDotNet8.Shared.Services.UnitOfWork
+namespace BlazorCrudDotNet8.Models.UnitOfWork
 {
     public class UnitOfWork<T> : IUnitOfWork<T> where T : class
     {

@@ -1,21 +1,26 @@
 using BlazorCrudDotNet8.Client.Pages;
 using BlazorCrudDotNet8.Components;
-using BlazorCrudDotNet8.Shared.Data;
-using BlazorCrudDotNet8.Shared.Entities;
-using BlazorCrudDotNet8.Shared.Services.Interfaces;
-using BlazorCrudDotNet8.Shared.Services.Repositories;
-using BlazorCrudDotNet8.Shared.Services.UnitOfWork;
+using BlazorCrudDotNet8.Models;
+using BlazorCrudDotNet8.Models.Entities;
+using BlazorCrudDotNet8.Models.Interfaces;
+using BlazorCrudDotNet8.Models.UnitOfWork;
+using Blazored.Toast;
+using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddBlazoredToast();
+builder.Services.AddSweetAlert2();
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore); // When selecting nested data (include)
 
 builder.Services.AddScoped(http => new HttpClient
 {
@@ -30,9 +35,6 @@ builder.Services.AddDbContext<DataContext>(options =>
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
                  .AddEntityFrameworkStores<DataContext>()
                  .AddDefaultTokenProviders();
-
-builder.Services.AddScoped<IGameService, GameService>();
-
 
 // ===== Unit of work setting =====
 builder.Services.AddScoped(typeof(IUnitOfWork<>), typeof(UnitOfWork<>));
